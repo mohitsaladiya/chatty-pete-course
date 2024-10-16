@@ -10,37 +10,6 @@ import clientPromise from "../../lib/mongodb";
 import { ObjectId } from "mongodb";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRobot } from "@fortawesome/free-solid-svg-icons";
-// import { streamReader } from "openai-edge-stream";
-
-// Function to generate random text of a specified length
-// const generateRandomText = (length) => {
-//   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
-//   let result = "";
-//   for (let i = 0; i < length; i++) {
-//     result += characters.charAt(Math.floor(Math.random() * characters.length));
-//   }
-//   return result;
-// };
-//
-// // Mock streamReader function
-// const mockStreamReader = async (reader, callback) => {
-//   // Simulate a stream of data with random text
-//   const messages = [
-//     { content: generateRandomText(4) }, // Random text with 20 characters
-//     { content: generateRandomText(5) }, // Random text with 15 characters
-//     { content: generateRandomText(8) }, // Random text with 25 characters
-//     { content: generateRandomText(3) }, // Random text with 25 characters
-//     { content: generateRandomText(6) }, // Random text with 25 characters
-//     { content: generateRandomText(3) }, // Random text with 25 characters
-//     { content: generateRandomText(5) }, // Random text with 25 characters
-//     { content: generateRandomText(7) }, // Random text with 25 characters
-//   ];
-//
-//   for (const message of messages) {
-//     await new Promise((resolve) => setTimeout(resolve, 400)); // Simulate delay
-//     await callback(message); // Call the original callback with a mocked message
-//   }
-// };
 
 export default function ChatPage({ chatId, title, messages = [] }) {
   const [incomingMessage, setIncomingMessage] = useState("");
@@ -115,19 +84,12 @@ export default function ChatPage({ chatId, title, messages = [] }) {
     const reader = data.getReader();
     let content = "";
     await streamReader(reader, async (message) => {
-      console.log("received message", message);
       if (message.event === "newChatId") {
         setNewChatId(message.content);
       }
       setIncomingMessage((s) => `${s}${message.content}`);
       content = content + message.content;
     });
-    // Use the mockStreamReader in place of streamReader
-    // const reader = {}; // Mocked reader object
-    // await mockStreamReader(reader, async (message) => {
-    //   console.log("received message", message);
-    //   setIncomingMessage((s) => `${s} ${message.content}`);
-    // });
     setFullMessage(content);
     setIncomingMessage("");
     setGeneratingResponse(false);
