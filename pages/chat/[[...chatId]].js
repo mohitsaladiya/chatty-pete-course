@@ -102,11 +102,11 @@ export default function ChatPage({ chatId, title, messages = [] }) {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        body: JSON.stringify({
-          chatId,
-          message: messageText,
-        }),
       },
+      body: JSON.stringify({
+        chatId,
+        message: messageText,
+      }),
     });
     const data = response.body;
     if (!data) {
